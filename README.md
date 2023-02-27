@@ -51,7 +51,7 @@ for example:
 # dataset
 root: datasets
 split_rate: 0.7
-classes: [0,1,2,3,4,5,6,7,8,9]
+num_classes: 10
 
 # model
 # ckpt: weights\last_ckpt_default.pth
