@@ -103,7 +103,7 @@ project.model.fc = torch.nn.Linear(
 project.model = torch.nn.Sequential(torch.nn.Conv2d(1, 3, 3, 1), project.model)
 # prepare train
 project.loss_fun=torch.nn.CrossEntropyLoss()
-project.optimizer=torch.optim.Adam(project.model.parameters(),project.LR)
+project.optimizer_fun=torch.optim.Adam
 # prepare metrics
 project.output_formater=lambda x: torch.max(x,dim=1).indices
 project.train_metrics={

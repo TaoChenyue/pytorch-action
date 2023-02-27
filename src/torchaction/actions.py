@@ -56,7 +56,7 @@ class BasicAction:
         self.dataset: Dataset = None
         self.model: torch.nn.Module = None
         self.loss_fun: Any = None
-        self.optimizer: Any = None
+        self.optimizer_fun: Any = None
         self.output_formater = lambda x: x
         self.train_metrics: Dict[str, Any] = None
         self.valid_metrics: Dict[str, Any] = None
@@ -78,15 +78,18 @@ class BasicAction:
         )
 
     def prepare_model(self):
-        if self.CKPT:
-            checkpoint = torch.load(self.CKPT,map_location=torch.device(self.DEVICE))
-            self.model.load_state_dict(checkpoint["model_state_dict"])
-            self.optimizer.load_state_dict(checkpoint["optimizer_state_dict"])
-            self.START_EPOCH = checkpoint["epoch"]
-
+        # put model into device
         if self.GPUS:
             self.model=torch.nn.DataParallel(self.model,device_ids=self.GPUS)
+        if self.CKPT:
+            checkpoint = torch.load(self.CKPT,map_location="cpu")
+            self.model.load_state_dict(checkpoint["model_state_dict"])
+            self.START_EPOCH = checkpoint["epoch"]
         self.model.to(self.DEVICE)
+        # init optimizer
+        self.optimizer = self.optimizer_fun(self.model.parameters(),self.LR)
+        if self.CKPT:
+            self.optimizer.load_state_dict(checkpoint["optimizer_state_dict"])
 
     def prepare_metrics(self):
         self.train_loss = MeanLoss(self.loss_fun)
@@ -103,7 +106,7 @@ class BasicAction:
         assert self.dataset, "Dataset not found"
         assert self.model, "Model not set"
         assert self.loss_fun, "loss function should be defined"
-        assert self.optimizer, "optimizer should be defined"
+        assert self.optimizer_fun, "optimizer should be defined"
         self.prepare_data()
         self.prepare_model()
         self.prepare_metrics()
