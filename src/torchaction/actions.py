@@ -79,7 +79,7 @@ class BasicAction:
 
     def prepare_model(self):
         if self.CKPT:
-            checkpoint = torch.load(self.CKPT,map_location=torch.device("cpu"))
+            checkpoint = torch.load(self.CKPT,map_location=torch.device(self.DEVICE))
             self.model.load_state_dict(checkpoint["model_state_dict"])
             self.optimizer.load_state_dict(checkpoint["optimizer_state_dict"])
             self.START_EPOCH = checkpoint["epoch"]
