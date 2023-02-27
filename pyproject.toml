@@ -1,0 +1,53 @@
+[tool.pdm]
+
+[project]
+name = "torchaction"
+version = "0.0.1"
+description = "Action for training/test using pytorch."
+authors = [
+    {name = "TaoChenyue", email = "3038816978@qq.com"},
+]
+dependencies = [
+    "tqdm>=4.64.1",
+    "torch>=1.8.0",
+    "tensorboardX>=2.6",
+    "pyyaml>=6.0",
+    "torch-tb-profiler>=0.4.1"
+]
+requires-python = ">=3.8"
+readme = "README.md"
+license = {text = "MIT"}
+
+[project.optional-dependencies]
+dev = [
+    "toml>=0.10.2",
+    "pip>=23.0.1",
+    "black>=23.1.0",
+]
+
+test = [
+    "torchvision>=0.9.0",
+    "torchmetrics>=0.11.1",
+    "torchaudio>=0.8.0",
+]
+
+[project.scripts]
+torchaction = "torchaction.parse_args:main"
+
+[build-system]
+requires = ["setuptools>=61", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[[tool.pdm.autoexport]]
+filename = "requirements_prod.txt"
+groups = ["default"]
+without-hashes = true
+
+[[tool.pdm.autoexport]]
+filename = "test/requirements_test.txt"
+groups = ["default","test"]
+without-hashes = true
+
+# [[tool.pdm.autoexport]]
+# filename = "setup.py"
+# format = "setuppy"
