@@ -2,7 +2,7 @@
 
 [project]
 name = "torchaction"
-version = "0.0.1"
+version = "0.0.2"
 description = "Action for training/test using pytorch."
 authors = [
     {name = "TaoChenyue", email = "3038816978@qq.com"},
